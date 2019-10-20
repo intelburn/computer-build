@@ -1,26 +1,92 @@
 ---
-- host: all
+- hosts: all
   become: yes
   tasks:
     - name: "Update Install Updates"
       apt:
         update_cache: yes
         upgrade: dist
-    - name: "Install a GUI"
-      apt:
-        name: kubuntu-desktop
-        state: latest
-    - name: "Reboot"
-      reboot:
-    - name: "Install Build-essential"
-      apt:
-        name: build-essential
-        state: latest
+    # - name: "Install a GUI"
+    #   apt:
+    #     name: kubuntu-desktop
+    #     state: latest
+    # - name: "Reboot"
+    #   reboot:
+    # - name: "Install Build-essential"
+    #   apt:
+    #     name: build-essential
+    #     state: latest
     - name: "Install ease of life packages"
       apt:
         name:
         - vim
         - obs-studio
         - keepassxc
-      state: latest
-      
+        - cockpit
+        - cockpit-networkmanager
+        state: latest
+    - name: "Install Atom"
+      apt:
+        deb: https://atom.io/download/deb
+    - name: "Install Veracrypt"
+      apt:
+        deb: https://launchpad.net/veracrypt/trunk/1.24/+download/veracrypt-console-1.24-Ubuntu-19.10-amd64.deb
+    - name: "Install Virtualbox"
+      apt:
+        name: virtualbox-qt
+    - name: "Add VSCode Key"
+      apt_key:
+        url: https://packages.microsoft.com/keys/microsoft.asc
+        state: present
+    - name: "Add VSCode Repo"
+      apt_repository:
+        repo: deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main
+        state: present
+        filename: vscode
+        update_cache: yes
+    - name: "Install VSCode"
+      apt:
+        name: code
+        state: latest
+    - name: "Add Resilio Key"
+      apt_key:
+        url: http://linux-packages.resilio.com/resilio-sync/key.asc
+        state: present
+    - name: "Add Resilio Repo"
+      apt_repository:
+        repo: deb http://linux-packages.resilio.com/resilio-sync/deb resilio-sync non-free
+        state: present
+        filename: resilio_sync
+        update_cache: yes
+    - name: "Install resilio"
+      apt:
+        name: resilio-sync
+        state: latest
+    # - name: "Disable Resilio system daemon"
+    #   systemd:
+    #     name: resilio-sync.service
+    #     scope: global
+    #     enabled: no
+    - name: "Change Resilio Unit file"
+      lineinfile:
+        path: /usr/lib/systemd/user/resilio-sync.service 
+        regex: '^WantedBy=multi-user\.target'
+        line: 'WantedBy=default.target'
+    # - name: "Enable Resilio user daemon"
+    #   systemd:
+    #     name: resilio-sync.service
+    #     scope: user
+    #     state: restarted
+    - name: "Install Signal"
+      snap:
+        name: signal-desktop
+    - name: "Install Slack"
+      snap:
+        name: slack
+        classic: yes
+    - name:
+      snap:
+        name: discord
+    - name: "Install Keybase"
+      apt:
+        deb: https://prerelease.keybase.io/keybase_amd64.deb
