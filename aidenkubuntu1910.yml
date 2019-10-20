@@ -1,0 +1,26 @@
+---
+- host: all
+  become: yes
+  tasks:
+    - name: "Update Install Updates"
+      apt:
+        update_cache: yes
+        upgrade: dist
+    - name: "Install a GUI"
+      apt:
+        name: kubuntu-desktop
+        state: latest
+    - name: "Reboot"
+      reboot:
+    - name: "Install Build-essential"
+      apt:
+        name: build-essential
+        state: latest
+    - name: "Install ease of life packages"
+      apt:
+        name:
+        - vim
+        - obs-studio
+        - keepassxc
+      state: latest
+      
