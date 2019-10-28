@@ -8,7 +8,7 @@
         upgrade: dist
     - name: "Reboot"
       reboot:
-   - name: "Install Build-essential"
+    - name: "Install Build-essential"
       apt:
         name: build-essential
         state: latest
