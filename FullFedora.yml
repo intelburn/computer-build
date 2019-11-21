@@ -1,7 +1,11 @@
 ---
 - hosts: all
+  become: yes
   tasks:
   - name: "Install Updates"
     dnf:
       name: "*"
       state: latest
+  - name: "Reboot"
+    reboot:
+  
