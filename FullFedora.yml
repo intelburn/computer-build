@@ -57,3 +57,17 @@
     dnf:
       name: https://atom.io/download/rpm
       state: present
+  - name: "Install Veracrypt"
+    dnf:
+      name: https://launchpad.net/veracrypt/trunk/1.24-hotfix1/+download/veracrypt-1.24-Hotfix1-CentOS-8-x86_64.rpm
+      state: present
+  - name: "Install Resilio"
+    dnf:
+      # Update this with a new link from https://help.resilio.com/hc/en-us/articles/206178924-Installing-Sync-package-on-Linux
+      name: https://download-cdn.resilio.com/2.6.3/RPM/resilio-sync-2.6.3-1.x86_64.rpm
+      state: present
+  - name: "Install VirtualBox"
+    dnf:
+      # Update this with a new link from https://www.virtualbox.org/wiki/Linux_Downloads
+      name: https://download.virtualbox.org/virtualbox/6.0.14/VirtualBox-6.0-6.0.14_133895_fedora29-1.x86_64.rpm
+      state: present
