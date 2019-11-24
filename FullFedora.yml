@@ -2,12 +2,12 @@
 - hosts: all
   become: yes
   tasks:
-  - name: "Install Updates"
-    dnf:
-      name: "*"
-      state: latest
-  - name: "Reboot"
-    reboot:
+#  - name: "Install Updates"
+#    dnf:
+#      name: "*"
+#      state: latest
+#  - name: "Reboot"
+#    reboot:
   - name: "Install RPM Fusion"
     dnf:
       name:
@@ -66,8 +66,24 @@
       # Update this with a new link from https://help.resilio.com/hc/en-us/articles/206178924-Installing-Sync-package-on-Linux
       name: https://download-cdn.resilio.com/2.6.3/RPM/resilio-sync-2.6.3-1.x86_64.rpm
       state: present
+  - name: "Change Resilio Unit file"
+    lineinfile:
+      path: /usr/lib/systemd/user/resilio-sync.service 
+      regex: '^WantedBy=multi-user\.target'
+      line: 'WantedBy=default.target'
+  - name: "Disable and stop Resilio from running as a system daemon"
+    script: ./resilio-disable.sh
+  - name: "Enable and start Resilio as a user daemon"
+    script:
+      cmd: ./resilio-enable.sh
   - name: "Install VirtualBox"
     dnf:
       # Update this with a new link from https://www.virtualbox.org/wiki/Linux_Downloads
       name: https://download.virtualbox.org/virtualbox/6.0.14/VirtualBox-6.0-6.0.14_133895_fedora29-1.x86_64.rpm
       state: present
+  - name: "Install Ansible"
+    dnf:
+      name:
+        - ansible
+        - ansible-lint
+        - ansible-doc
