@@ -52,16 +52,16 @@
         - libglvnd-devel
         - pkgconfig
       state: latest
-    # - name: "Install Nvidia"
-    #   dnf:
-    #     name:
-    #       - akmod-nvidia
-    #       - xorg-x11-drv-nvidia-cuda
-    #     state: latest
-    # - name: "Install Updates"
-    #   dnf:
-    #     name: "*"
-    #     state: latest
+  - name: "Install Nvidia"
+     dnf:
+      name:
+        - akmod-nvidia
+        - xorg-x11-drv-nvidia-cuda
+      state: latest
+  - name: "Install Updates"
+    dnf:
+      name: "*"
+      state: latest
   - name: "Install VSCode"
     dnf:
       name: https://go.microsoft.com/fwlink/?LinkID=760867
@@ -130,4 +130,9 @@
       src: https://releases.hashicorp.com/packer/1.4.5/packer_1.4.5_linux_amd64.zip
       dest: /usr/local/bin
       remote_src: yes
-
+  - name: "Final Update check"
+    dnf:
+      name: "*"
+      state: latest
+  - name: "Final Reboot"
+    reboot:
