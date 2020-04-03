@@ -20,6 +20,7 @@
         - epel-release
         - git
         - wget
+        - nmap
       state: latest
   - name: "Install Ansible"
     dnf:

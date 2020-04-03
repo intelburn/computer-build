@@ -1,8 +1,6 @@
 ---
-#- ansible_become_password: packer
 - hosts: all
   become: yes
-  #ansible_become_password: packer
   tasks:
   - name: Install RHEL updates
     yum:
@@ -13,10 +11,17 @@
     yum:
       autoremove: yes
     when: ansible_facts['os_family']|lower == 'redhat'
+  - name: Run apt update
+    apt:
+      update_cache: yes
+    when: ansible_facts['pkg_mgr']|lower == 'apt'
   - name: Install Debian Updates
     apt:
       upgrade: dist
+    when: ansible_facts['pkg_mgr']|lower == 'apt'
+  - name: Clean Debian machines
+    apt:
       autoclean: yes
       autoremove: yes
-    when: ansible_facts['os_family']|lower == 'debian'
+    when: ansible_facts['pkg_mgr']|lower == 'apt'
   

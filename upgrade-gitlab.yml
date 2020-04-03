@@ -1,0 +1,7 @@
+---
+- hosts: xen
+  tasks:
+  - name: "Install GitLab 11.10"
+    yum:
+      name: gitlab-ee
+      state: latest 
