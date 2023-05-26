@@ -6,37 +6,14 @@
     dnf:
       name: "*"
       state: latest
-  - name: "Install Snappy"
-    dnf:
-      name: snapd
-      state: latest
-  - name: "Enable Classic Snaps"
-    file:
-      src: /var/lib/snapd/snap
-      dest: /snap
-      state: link
-  - name: "Enable Snappy Service"
-    service:
-      name: snapd
-      enabled: yes
   - name: "Reboot"
     reboot:
-  - name: "Install RPM Fusion"
-    dnf:
-      name:
-        - 'https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-31.noarch.rpm'
-        - 'https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-31.noarch.rpm'
-      state: present
   - name: "Install Cockpit"
     dnf:
       name:
         - cockpit
         - cockpit-storaged
         - cockpit-storaged
-      state: latest
-  - name: "Install KeepassXC"
-    dnf:
-      name: "keepassxc"
       state: latest
   - name: "Install Nvidia Dependencies"
     dnf:
@@ -62,17 +39,9 @@
     dnf:
       name: "*"
       state: latest
-  - name: "Install VSCode"
     dnf:
-      name: https://go.microsoft.com/fwlink/?LinkID=760867
-      state: present
-  - name: "Install Atom"
-    dnf:
-      name: https://atom.io/download/rpm
-      state: present
-  - name: "Install Veracrypt"
-    dnf:
-      name: https://launchpad.net/veracrypt/trunk/1.24-hotfix1/+download/veracrypt-1.24-Hotfix1-CentOS-8-x86_64.rpm
+  - name: "VSCode"
+      name: https://code.visualstudio.com/sha/download?build=stable&os=linux-rpm-x64 
       state: present
   - name: "Install Resilio"
     dnf:
@@ -86,11 +55,12 @@
       line: 'WantedBy=default.target'
   - name: "Disable and stop Resilio from running as a system daemon"
     script: ./resilio-disable.sh
-  - name: "Install VirtualBox"
-    dnf:
-      # Update this with a new link from https://www.virtualbox.org/wiki/Linux_Downloads
-      name: https://download.virtualbox.org/virtualbox/6.0.14/VirtualBox-6.0-6.0.14_133895_fedora29-1.x86_64.rpm
-      state: present
+  - name: "Add VirtualBox Repo"
+    yum_repository:
+      name: "VirtualBox"
+      baseurl: "http://download.virtualbox.org/virtualbox/rpm/fedora/$releasever/$basearch"
+      gpgkey: "https://www.virtualbox.org/download/oracle_vbox_2016.asc"
+  - name
   - name: "Add Current user to vboxusers group"
     user:
       # change user to match your configuration
@@ -105,13 +75,6 @@
         - ansible
         - ansible-lint
         - ansible-doc
-  - name: "Install Signal"
-    snap:
-      name: signal-desktop
-  - name: "Install Slack"
-    snap:
-      name: slack
-      classic: yes
   - name: "Intall Discord"
     snap:
       name: discord
@@ -119,17 +82,6 @@
     dnf:
       name: https://prerelease.keybase.io/keybase_amd64.rpm
       state: present
-  - name: "Install Vagrant"
-    dnf:
-      name:
-        - vagrant
-      state: latest
-  - name: "Install Packer"
-    unarchive:
-      #Update this from https://www.packer.io/downloads.html
-      src: https://releases.hashicorp.com/packer/1.4.5/packer_1.4.5_linux_amd64.zip
-      dest: /usr/local/bin
-      remote_src: yes
   - name: "Final Update check"
     dnf:
       name: "*"
