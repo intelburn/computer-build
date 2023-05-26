@@ -1,6 +1,6 @@
 ---
 - hosts: all
-  become: yes
+  become: true
   tasks:
   - name: "Install Updates"
     dnf:
@@ -14,39 +14,23 @@
         - cockpit
         - cockpit-storaged
         - cockpit-storaged
-      state: latest
-  - name: "Install Nvidia Dependencies"
-    dnf:
-      name:
-        - kernel-devel
-        - kernel-headers
-        - gcc
-        - make
-        - dkms
-        - acpid
-        - libglvnd-glx
-        - libglvnd-opengl
-        - libglvnd-devel
-        - pkgconfig
-      state: latest
+      state: present
   - name: "Install Nvidia"
-     dnf:
-      name:
-        - akmod-nvidia
-        - xorg-x11-drv-nvidia-cuda
-      state: latest
+    dnf:
+      name: akmod-nvidia
+      state: present
   - name: "Install Updates"
     dnf:
       name: "*"
-      state: latest
-    dnf:
+      state: present
   - name: "VSCode"
+    dnf:
       name: https://code.visualstudio.com/sha/download?build=stable&os=linux-rpm-x64 
       state: present
   - name: "Install Resilio"
     dnf:
       # Update this with a new link from https://help.resilio.com/hc/en-us/articles/206178924-Installing-Sync-package-on-Linux
-      name: https://download-cdn.resilio.com/2.6.3/RPM/resilio-sync-2.6.3-1.x86_64.rpm
+      name: https://download-cdn.resilio.com/2.7.3.1381/RPM/resilio-sync-2.7.3.1381-1.x86_64.rpm
       state: present
   - name: "Change Resilio Unit file"
     lineinfile:
@@ -60,24 +44,31 @@
       name: "VirtualBox"
       baseurl: "http://download.virtualbox.org/virtualbox/rpm/fedora/$releasever/$basearch"
       gpgkey: "https://www.virtualbox.org/download/oracle_vbox_2016.asc"
-  - name
+  - name: "Install VirtualBox"
+    dnf:
+      name: "Virtualbox-7.0"
+      state: present
   - name: "Add Current user to vboxusers group"
     user:
       # change user to match your configuration
-      name: n00b
+      name: command
       groups: vboxusers
       append: yes
-  - name: "Install vbox extpack"
-    script: ./install-vbox-extpack.sh 6.0.14
   - name: "Install Ansible"
     dnf:
       name:
         - ansible
         - ansible-lint
         - ansible-doc
+      state: present
+  - name: "install Chrome"
+    flatpak:
+      name: com.google.Chrome
+      state: present
   - name: "Intall Discord"
-    snap:
-      name: discord
+    flatpak:
+      name: com.discordapp.Discord
+      state: present
   - name: "Install Keybase"
     dnf:
       name: https://prerelease.keybase.io/keybase_amd64.rpm
