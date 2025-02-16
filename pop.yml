@@ -1,0 +1,8 @@
+---
+- hosts: all
+  become: true
+  tasks:
+  - name: "Run software updates"
+    ansible.builtin.apt:
+      update_cache: true
+      upgrade: dist
